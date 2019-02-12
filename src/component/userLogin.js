@@ -7,11 +7,10 @@ import {
   TextField,
   RaisedButton,
   Dialog,
-  Checkbox 
+
   } from 'material-ui';
  
 import styles from './Style'
-
  
 class Login extends Component {
  
@@ -22,22 +21,20 @@ class Login extends Component {
 
   };
   handleUsername(e){
-    // this.setState({
-    //   username:e.target.value
-    // })
-    this.props.dispatch({type:'handleLogin',target:e.target.value})
+  
+    this.props.dispatch({type:'onSubmitLogin',target:e.target.value})
 
   }
-  handleOnSubmit(){
-    Api.loginUser(this.props.username)
-    .then(response => response.json())
-      .then(data=>{
-          console.log(data)
-      })
-      .catch(err=>console.log(err))
+//   handleOnSubmit(){
+//     Api.donorLogin(this.props.username)
+//     .then(response => response.json())
+//       .then(data=>{
+//           console.log(data)
+//       })
+//       .catch(err=>console.log(err))
 
 
-  }
+//   }
  
   handleOpen = () => {
     this.setState({open: true});
@@ -45,13 +42,16 @@ class Login extends Component {
  
   handleClose = () => {
     this.setState({open: false});
-    Api.loginUser(this.props.username)
+    Api.donorLogin(this.props.email,this.props.password)
     .then(response => response.json())
       .then(data=>{
           console.log(data)
       })
       .catch(err=>console.log(err))
   };
+  handlePassword(e){
+      this.props.dispatch({type:'onSubmitLoginPassword',target:e.target.value})
+  }
  
   updateCheck() {
     this.setState((oldState) => {
@@ -101,18 +101,20 @@ class Login extends Component {
           floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
           underlineFocusStyle={styles.underlineStyle}
           fullWidth={true}
-          value={this.props.username}
+          value={this.props.email}
           onChange={this.handleUsername.bind(this)}
           
         /><br />
-        {/* <TextField
+        <TextField
           type="password"
           floatingLabelText="Password"
           floatingLabelStyle={styles.floatingLabelStyle}
           floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
           underlineFocusStyle={styles.underlineStyle}
           fullWidth={true}
-        /><br /> */}
+          value={this.props.password}
+          onChange={this.handlePassword.bind(this)}
+        /><br />
        
         
         </Dialog>
@@ -122,7 +124,8 @@ class Login extends Component {
 }
 function mapStateToProps(state){
   return {
-   username:state.usernamelogin
+email:state.donorRegistration.userLoginEmail,
+    password:state.donorRegistration.userLoginPassword
   };
 }
 export default connect(mapStateToProps)(Login);

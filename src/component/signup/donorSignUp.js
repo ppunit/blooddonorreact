@@ -24,7 +24,6 @@ class SignUp extends Component {
     checked: false,
     finished: false,
     stepIndex: 0,
- 
   };
  
   handleOpen = () => {
@@ -42,28 +41,27 @@ class SignUp extends Component {
       };
     });
   }
-  postUserData(){
-
-
-      Api.postUserdata(this.props.username,this.props.hospitalName,this.props.phoneNo,this.props.email,this.props.address,this.props.latitude,this.props.longitude)
-      .then(response => response.json())
-      .then(data=>{
-          console.log(data)
-      })
-      .catch(err=>console.log(err))
-  }
  
   handleNext = () => {
     const {stepIndex} = this.state;
     if (stepIndex === 2) {
       this.setState({stepIndex: 0, finished: false});
-      this.postUserData()
+      this.postDonorData()
+      
     }
     this.setState({
       stepIndex: stepIndex + 1,
       finished: stepIndex >= 2,
     });
   };
+  postDonorData(){
+  Api.postDonordata(this.props.bloodGroup,this.props.userPassword,this.props.firstName,this.props.lastName,this.props.userphoneNo,this.props.userEmail,this.props.userAddress,this.props.userLatitude,this.props.userLongitude)
+    .then(response => response.json())
+    .then(data=>{
+        console.log(data)
+    })
+    .catch(err=>console.log(err))
+}
  
   handlePrev = () => {
     const {stepIndex} = this.state;
@@ -71,34 +69,39 @@ class SignUp extends Component {
       this.setState({stepIndex: stepIndex - 1});
     }
   };
+
   handleName(e){
+    this.props.dispatch({type:'onSubmitFirstName',target:e.target.value})
+    console.log(this.props.donorName)
+ 
+  }
+  handleLastName(e){
   
-    this.props.dispatch({type:'handlename',target:e.target.value})
-    console.log(this.props.hospitalName)
+    this.props.dispatch({type:'onSubmitLastName',target:e.target.value})
 
   }
   handleEmail(e){
     
-    this.props.dispatch({type:'handleEmail',target:e.target.value})
+    this.props.dispatch({type:'onSubmitEmail',target:e.target.value})
 
   }
   handlePhoneNumber(e){
 
-    this.props.dispatch({type:'handlePhoneNumber',target:e.target.value})
+    this.props.dispatch({type:'onSubmitPhoneNumber',target:e.target.value})
 
 
   }
-  handleUserName(e){
-this.props.dispatch({type:'handleUserName',target:e.target.value})
+  handleBloodGroup(e){
+this.props.dispatch({type:'onSubmitBloodGroup',target:e.target.value})
   }
   handlePassword(e){
-this.props.dispatch({type:'handlePassword',target:e.target.value})
+this.props.dispatch({type:'onSubmitPassword',target:e.target.value})
 
 
   }
   handleAddress=(e)=>{
 
-    this.props.dispatch({type:'handleAddress',target:e.target.value})
+    this.props.dispatch({type:'onSubmitAddress',target:e.target.value})
     
 
   }
@@ -108,43 +111,52 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
       case 0:
         return <div>
                 <TextField
-                  floatingLabelText="Hospital Name"
+                  floatingLabelText=" Name"
                   floatingLabelStyle={styles.floatingLabelStyle}
                   floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                   underlineFocusStyle={styles.underlineStyle}
-                  value={this.props.hospitalName}
+                  value={this.props.firstName}
                   fullWidth={true}
+                  
                   onChange={this.handleName.bind(this)}
                 /><br />
-               
+                <TextField
+                  floatingLabelText="Last Name"
+                  floatingLabelStyle={styles.floatingLabelStyle}
+                  floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                  underlineFocusStyle={styles.underlineStyle}
+                  fullWidth={true}
+                  value={this.props.lastName}
+                  onChange={this.handleLastName.bind(this)}
+                /><br />
                 <TextField
                   floatingLabelText="Phone Number"
                   floatingLabelStyle={styles.floatingLabelStyle}
                   floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                   underlineFocusStyle={styles.underlineStyle}
                   fullWidth={true}
-                  value={this.props.phoneNo}
+                  value={this.props.userphoneNo}
                   onChange={this.handlePhoneNumber.bind(this)}
                 />
             </div>;
       case 1:
         return <div>
-           < TextField
-                      floatingLabelText="Username"
+          <TextField
+                      floatingLabelText="Blood Group"
                       floatingLabelStyle={styles.floatingLabelStyle}
                       floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                       underlineFocusStyle={styles.underlineStyle}
                       fullWidth={true}
-                      value={this.props.username}
-                      onChange={this.handleUserName.bind(this)}
-                    /><br /> 
+                      value={this.props.bloodGroup}
+                      onChange={this.handleBloodGroup.bind(this)}
+                    /><br />  
                     <TextField
                       floatingLabelText="Email"
                       floatingLabelStyle={styles.floatingLabelStyle}
                       floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                       underlineFocusStyle={styles.underlineStyle}
                       fullWidth={true}
-                      value={this.props.email}
+                      value={this.props.userEmail}
                       onChange={this.handleEmail.bind(this)}
                     /><br />  
                     <TextField
@@ -154,7 +166,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
                       floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                       underlineFocusStyle={styles.underlineStyle}
                       fullWidth={true}
-                      value={this.props.password}
+                      value={this.props.userPassword}
                       onChange={this.handlePassword.bind(this)}
                     /><br />
               </div>;
@@ -167,7 +179,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
                 multiLine={true}
                 rows={2}
                 fullWidth={true}
-                value={this.props.address}
+                value={this.props.userAddress}
                 onChange={this.handleAddress.bind(this)}
               />
       default:
@@ -176,7 +188,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
   }
  
   render(){
-    console.log(this.props)
+
     const {finished, stepIndex} = this.state;
     const contentStyle = {margin: '0 16px'};
     const actions = [      
@@ -210,7 +222,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
           style={styles.buttonStyle} 
         />              
         <Dialog
-          title="Sign Up To Webjustify "
+          title="Sign Up To Blood Donor "
           actions={actions}
           modal={true}
           open={this.state.open}
@@ -236,16 +248,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
         <div style={contentStyle}>
           {finished ? (
             <div>I don't have account 
-              <a
-                href="https://www.webjustify.com"
-                onClick={(event) => {
-                  event.preventDefault();
-                  this.setState({stepIndex: 0, finished: false});
-                }}
-                style={styles.loginLink}
-              >
-                SignUp
-              </a>
+              
             </div>
           ) : (
             <div>
@@ -261,14 +264,15 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
 }
 function mapStateToProps(state){
   return {
-    hospitalName:state.registrationHospital.hospitalName,
-    phoneNo:state.registrationHospital.phoneNo,
-    username:state.registrationHospital.username,
-    email:state.registrationHospital.email,
-    password:state.registrationHospital.password,
-    address:state.registrationHospital.address,
-    latitude:state.registrationHospital.latitude,
-    longitude:state.registrationHospital.longitude
+    firstName:state.donorRegistration.firstName,
+    lastName:state.donorRegistration.lastName,
+    userphoneNo:state.donorRegistration.userphoneNo,
+    bloodGroup:state.donorRegistration.bloodGroup,
+    userEmail:state.donorRegistration.userEmail,
+    userPassword:state.donorRegistration.userPassword,
+    userAddress:state.donorRegistration.userAddress,
+    userLatitude:'12.807970',
+    userLongitude:'77.562400',
   };
 }
 export default connect(mapStateToProps)(SignUp);

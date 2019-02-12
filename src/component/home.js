@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
  
 import Login from './login'
+import DonorLogin from './userLogin'
+import DonorSignup from './signup/donorSignUp'
 import SignUp from './signup/signup';
  
 class Home extends Component {
@@ -12,9 +14,10 @@ class Home extends Component {
   render(){   
     return (
       <MuiThemeProvider>
+        <DonorLogin/>
+        <DonorSignup/>
         <Login />
         <SignUp />
-        {/* <Link to="/counter">Counter</Link> */}
       </MuiThemeProvider>
     )
   }

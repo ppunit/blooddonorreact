@@ -1,15 +1,12 @@
-const initialState={
-    hospitalData:''
-   
-}
+import { combineReducers } from 'redux';
 
-export default function reducer(state=initialState,action){
-    console.log("called reducer")
-    switch(action.type){
-        
-        
-        default:return state;
-    }
-    
+import {registrationHospital} from './registration.reducer';
+import {donorRegistration} from './donorRegistration';
 
-}
+
+const rootReducer = combineReducers({
+    registrationHospital,
+    donorRegistration
+});
+
+export default rootReducer;
