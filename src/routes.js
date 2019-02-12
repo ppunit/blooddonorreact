@@ -3,7 +3,6 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
  
 import App from './App';
-import Home from './component/home';
 
  
 const Routes = () => (

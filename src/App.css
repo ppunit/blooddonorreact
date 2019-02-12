@@ -1,0 +1,30 @@
+.hospital-header{
+    color:red;
+    width: 100%;
+    background-color:#4CAF50;
+    padding:2% 0
+}
+.login-button{
+    display:flex;
+  align-content: center;
+  justify-content: center;
+  padding:100px;
+}
+.patient-details{
+    margin:10px
+}
+.cards{
+    display:flex;
+    flex-wrap: wrap
+}
+.new-patient-button{
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+}

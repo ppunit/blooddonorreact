@@ -25,16 +25,17 @@ class Login extends Component {
     this.props.dispatch({type:'onSubmitLogin',target:e.target.value})
 
   }
-//   handleOnSubmit(){
-//     Api.donorLogin(this.props.username)
-//     .then(response => response.json())
-//       .then(data=>{
-//           console.log(data)
-//       })
-//       .catch(err=>console.log(err))
+  handleOnSubmit(){
+    Api.donorLogin(this.props.username)
+    .then(response => response.json())
+      .then(data=>{
+          console.log(data)
+          this.setState({open: false});
+      })
+      .catch(err=>console.log(err))
 
 
-//   }
+  }
  
   handleOpen = () => {
     this.setState({open: true});
@@ -42,12 +43,7 @@ class Login extends Component {
  
   handleClose = () => {
     this.setState({open: false});
-    Api.donorLogin(this.props.email,this.props.password)
-    .then(response => response.json())
-      .then(data=>{
-          console.log(data)
-      })
-      .catch(err=>console.log(err))
+   
   };
   handlePassword(e){
       this.props.dispatch({type:'onSubmitLoginPassword',target:e.target.value})
@@ -63,6 +59,7 @@ class Login extends Component {
  
   render(){
       console.log("login")
+      console.log(this.props)
     const actions = [
       
       <RaisedButton
@@ -73,7 +70,7 @@ class Login extends Component {
       />,
       <RaisedButton
         label="Submit"
-        onClick={this.handleClose}
+        onClick={this.handleOnSubmit}
        
         secondary={true}
         style={styles.buttonStyle}

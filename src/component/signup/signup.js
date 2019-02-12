@@ -5,9 +5,8 @@ import Api from '../api/api'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { 
   TextField,
-  RaisedButton,
   Dialog,
- 
+ RaisedButton
 } from 'material-ui';
 import {
   Step,
@@ -24,7 +23,14 @@ class SignUp extends Component {
     checked: false,
     finished: false,
     stepIndex: 0,
- 
+    hospitalName:'',
+    phoneNo:'',
+    username:'',
+    email:'',
+    password:'',
+    address:'',
+    latitude:'12.807970',
+    longitude:'77.562400'
   };
  
   handleOpen = () => {
@@ -45,10 +51,11 @@ class SignUp extends Component {
   postUserData(){
 
 
-      Api.postUserdata(this.props.username,this.props.hospitalName,this.props.phoneNo,this.props.email,this.props.address,this.props.latitude,this.props.longitude)
+      Api.postUserdata(this.state.username,this.state.hospitalName,this.state.phoneNo,this.state.email,this.state.address,this.state.latitude,this.state.longitude)
       .then(response => response.json())
       .then(data=>{
           console.log(data)
+          this.setState({open: false});
       })
       .catch(err=>console.log(err))
   }
@@ -72,34 +79,42 @@ class SignUp extends Component {
     }
   };
   handleName(e){
-  
-    this.props.dispatch({type:'handlename',target:e.target.value})
-    console.log(this.props.hospitalName)
+    this.setState({
+        hospitalName:e.target.value
+
+    })
 
   }
   handleEmail(e){
-    
-    this.props.dispatch({type:'handleEmail',target:e.target.value})
+      this.setState({
+          email:e.target.value
 
+      })
   }
   handlePhoneNumber(e){
+    this.setState({
+        phoneNo:e.target.value
 
-    this.props.dispatch({type:'handlePhoneNumber',target:e.target.value})
-
+    })
 
   }
   handleUserName(e){
-this.props.dispatch({type:'handleUserName',target:e.target.value})
+    this.setState({
+username:e.target.value
+    })
+
   }
   handlePassword(e){
-this.props.dispatch({type:'handlePassword',target:e.target.value})
-
+    this.setState({
+password:e.target.value
+    })
 
   }
   handleAddress=(e)=>{
+    this.setState({
+        address:e.target.value
 
-    this.props.dispatch({type:'handleAddress',target:e.target.value})
-    
+    })
 
   }
  
@@ -112,7 +127,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
                   floatingLabelStyle={styles.floatingLabelStyle}
                   floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                   underlineFocusStyle={styles.underlineStyle}
-                  value={this.props.hospitalName}
+                  value={this.state.hospitalName}
                   fullWidth={true}
                   onChange={this.handleName.bind(this)}
                 /><br />
@@ -123,7 +138,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
                   floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                   underlineFocusStyle={styles.underlineStyle}
                   fullWidth={true}
-                  value={this.props.phoneNo}
+                  value={this.state.phoneNo}
                   onChange={this.handlePhoneNumber.bind(this)}
                 />
             </div>;
@@ -135,7 +150,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
                       floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                       underlineFocusStyle={styles.underlineStyle}
                       fullWidth={true}
-                      value={this.props.username}
+                      value={this.state.username}
                       onChange={this.handleUserName.bind(this)}
                     /><br /> 
                     <TextField
@@ -144,7 +159,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
                       floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                       underlineFocusStyle={styles.underlineStyle}
                       fullWidth={true}
-                      value={this.props.email}
+                      value={this.state.email}
                       onChange={this.handleEmail.bind(this)}
                     /><br />  
                     <TextField
@@ -154,7 +169,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
                       floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                       underlineFocusStyle={styles.underlineStyle}
                       fullWidth={true}
-                      value={this.props.password}
+                      value={this.state.password}
                       onChange={this.handlePassword.bind(this)}
                     /><br />
               </div>;
@@ -167,7 +182,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
                 multiLine={true}
                 rows={2}
                 fullWidth={true}
-                value={this.props.address}
+                value={this.state.address}
                 onChange={this.handleAddress.bind(this)}
               />
       default:
@@ -176,7 +191,6 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
   }
  
   render(){
-    console.log(this.props)
     const {finished, stepIndex} = this.state;
     const contentStyle = {margin: '0 16px'};
     const actions = [      
@@ -210,7 +224,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
           style={styles.buttonStyle} 
         />              
         <Dialog
-          title="Sign Up To Webjustify "
+          title="Hospital Registration "
           actions={actions}
           modal={true}
           open={this.state.open}
@@ -236,16 +250,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
         <div style={contentStyle}>
           {finished ? (
             <div>I don't have account 
-              <a
-                href="https://www.webjustify.com"
-                onClick={(event) => {
-                  event.preventDefault();
-                  this.setState({stepIndex: 0, finished: false});
-                }}
-                style={styles.loginLink}
-              >
-                SignUp
-              </a>
+              
             </div>
           ) : (
             <div>
@@ -261,14 +266,7 @@ this.props.dispatch({type:'handlePassword',target:e.target.value})
 }
 function mapStateToProps(state){
   return {
-    hospitalName:state.registrationHospital.hospitalName,
-    phoneNo:state.registrationHospital.phoneNo,
-    username:state.registrationHospital.username,
-    email:state.registrationHospital.email,
-    password:state.registrationHospital.password,
-    address:state.registrationHospital.address,
-    latitude:state.registrationHospital.latitude,
-    longitude:state.registrationHospital.longitude
+    count: state.counterReducer,
   };
 }
 export default connect(mapStateToProps)(SignUp);

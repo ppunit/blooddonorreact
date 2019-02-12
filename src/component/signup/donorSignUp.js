@@ -59,6 +59,7 @@ class SignUp extends Component {
     .then(response => response.json())
     .then(data=>{
         console.log(data)
+        this.setState({open: false});
     })
     .catch(err=>console.log(err))
 }

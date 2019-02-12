@@ -2,15 +2,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Api from './api/api'
+import '../App.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import DisplayHospitalDetails from './hospital/DisplayPatientDetails' 
 import { 
   TextField,
   RaisedButton,
-  Dialog,
-  Checkbox 
+  Dialog
   } from 'material-ui';
  
 import styles from './Style'
+import SignUp from './signup/signup';
+
 
  
 class Login extends Component {
@@ -18,21 +21,23 @@ class Login extends Component {
   state = {
     open: false,
     checked: false,
-    
+    username:'',
+    hospitalDetails: '',
+    isLogin:false
 
   };
   handleUsername(e){
-    // this.setState({
-    //   username:e.target.value
-    // })
-    this.props.dispatch({type:'handleLogin',target:e.target.value})
+    this.setState({
+      username:e.target.value
+    })
 
   }
   handleOnSubmit(){
-    Api.loginUser(this.props.username)
+    Api.loginUser(this.state.username)
     .then(response => response.json())
       .then(data=>{
           console.log(data)
+           this.setState({open: false});
       })
       .catch(err=>console.log(err))
 
@@ -45,12 +50,7 @@ class Login extends Component {
  
   handleClose = () => {
     this.setState({open: false});
-    Api.loginUser(this.props.username)
-    .then(response => response.json())
-      .then(data=>{
-          console.log(data)
-      })
-      .catch(err=>console.log(err))
+    
   };
  
   updateCheck() {
@@ -62,8 +62,7 @@ class Login extends Component {
   }
  
   render(){
-      console.log("login")
-    const actions = [
+     const actions = [
       
       <RaisedButton
         label="Cancel"
@@ -73,14 +72,18 @@ class Login extends Component {
       />,
       <RaisedButton
         label="Submit"
-        onClick={this.handleClose}
+        onClick={this.handleOnSubmit}
        
         secondary={true}
         style={styles.buttonStyle}
       />,
     ];
- 
+
     return (
+      <div>
+      {this.state.isLogin?<DisplayHospitalDetails patientDetails={this.state.patientDetails}/>:
+      <span className="login-button">
+      
       <MuiThemeProvider>
         <RaisedButton 
           label="Login" 
@@ -89,7 +92,7 @@ class Login extends Component {
           style={styles.buttonStyle} 
         />      
         <Dialog
-          title="Sign In To Blood Donor"
+          title="Sign In To Hospital"
           actions={actions}
           modal={true}
           open={this.state.open}
@@ -101,28 +104,23 @@ class Login extends Component {
           floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
           underlineFocusStyle={styles.underlineStyle}
           fullWidth={true}
-          value={this.props.username}
+          value={this.state.username}
           onChange={this.handleUsername.bind(this)}
           
-        /><br />
-        {/* <TextField
-          type="password"
-          floatingLabelText="Password"
-          floatingLabelStyle={styles.floatingLabelStyle}
-          floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
-          underlineFocusStyle={styles.underlineStyle}
-          fullWidth={true}
-        /><br /> */}
-       
+        />
         
         </Dialog>
+        
       </MuiThemeProvider>
+      <SignUp />
+      </span>}
+      </div>
     )
   }
 }
 function mapStateToProps(state){
   return {
-   username:state.usernamelogin
+    count: state.counterReducer,
   };
 }
 export default connect(mapStateToProps)(Login);

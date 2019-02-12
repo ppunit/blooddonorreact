@@ -5,8 +5,8 @@ import {donorRegistration} from './donorRegistration';
 
 
 const rootReducer = combineReducers({
-    registrationHospital,
-    donorRegistration
+   registrationHospital,
+   donorRegistration
 });
 
 export default rootReducer;
