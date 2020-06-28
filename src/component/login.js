@@ -104,7 +104,7 @@ class Login extends Component {
           floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
           underlineFocusStyle={styles.underlineStyle}
           fullWidth={true}
-          value={this.state.username}
+          value={this.props.username}
           onChange={this.handleUsername.bind(this)}
           
         />
